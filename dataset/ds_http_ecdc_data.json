@@ -8,6 +8,9 @@
 		"parameters": {
 			"relative_url": {
 				"type": "string"
+			},
+			"base_url": {
+				"type": "string"
 			}
 		},
 		"annotations": [],
