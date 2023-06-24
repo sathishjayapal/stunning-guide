@@ -103,6 +103,48 @@
 					},
 					"firstRowOnly": false
 				}
+			},
+			{
+				"name": "For Config Json Iteration",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Config Lookup",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Config Lookup').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "SetVariableInfo",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "sourceRelativeUrl",
+								"value": {
+									"value": "@item().sourceRelativeUrl",
+									"type": "Expression"
+								}
+							}
+						}
+					]
+				}
 			}
 		],
 		"parameters": {
@@ -111,6 +153,11 @@
 			},
 			"file_name": {
 				"type": "string"
+			}
+		},
+		"variables": {
+			"sourceRelativeUrl": {
+				"type": "String"
 			}
 		},
 		"annotations": []
