@@ -54,7 +54,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"relative_url": {
-								"value": "@variables('src_relative_url')",
+								"value": "@pipeline().parameters.relative_url_name",
 								"type": "Expression"
 							}
 						}
@@ -66,7 +66,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"file_name": {
-								"value": "@variables('sinkFileName')",
+								"value": "@pipeline().parameters.file_name",
 								"type": "Expression"
 							}
 						}
