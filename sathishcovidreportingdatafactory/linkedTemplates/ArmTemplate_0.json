@@ -123,7 +123,14 @@
 					{
 						"name": "Copy Population Data",
 						"type": "Copy",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "Check File exists",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"policy": {
 							"timeout": "0.00:05:00",
 							"retry": 3,
@@ -179,6 +186,39 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "Check File exists",
+						"type": "Validation",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "ds_population_raw_gz",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"timeout": "0.00:01:00",
+							"sleep": 10,
+							"minimumSize": 1024
+						}
+					},
+					{
+						"name": "File Has Not come",
+						"type": "Fail",
+						"dependsOn": [
+							{
+								"activity": "Check File exists",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"message": "File Not there",
+							"errorCode": "F0001"
+						}
 					}
 				],
 				"policy": {
