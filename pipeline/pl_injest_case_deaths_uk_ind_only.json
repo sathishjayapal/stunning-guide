@@ -51,17 +51,37 @@
 				"inputs": [
 					{
 						"referenceName": "ds_http_case_deaths_uk_ind_only",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"relative_url": {
+								"value": "@variables('src_relative_url')",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"outputs": [
 					{
 						"referenceName": "ds_case_deaths_uk_ind_only_csv",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"file_name": {
+								"value": "@variables('sinkFileName')",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			}
 		],
+		"parameters": {
+			"relative_url_name": {
+				"type": "string"
+			},
+			"file_name": {
+				"type": "string"
+			}
+		},
 		"variables": {
 			"src_relative_url": {
 				"type": "String",
