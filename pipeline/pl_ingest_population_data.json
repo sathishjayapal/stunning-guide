@@ -95,7 +95,7 @@
 					],
 					"ifTrueActivities": [
 						{
-							"name": "Copy Population Data",
+							"name": "Copy Source File",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
@@ -111,6 +111,7 @@
 									"type": "DelimitedTextSource",
 									"storeSettings": {
 										"type": "AzureBlobStorageReadSettings",
+										"maxConcurrentConnections": 1,
 										"recursive": true,
 										"enablePartitionDiscovery": false
 									},
@@ -130,6 +131,19 @@
 									}
 								},
 								"enableStaging": false,
+								"logSettings": {
+									"enableCopyActivityLog": true,
+									"copyActivityLogSettings": {
+										"logLevel": "Info",
+										"enableReliableLogging": false
+									},
+									"logLocationSettings": {
+										"linkedServiceName": {
+											"referenceName": "ls_ablob_sathishcovidreportsa",
+											"type": "LinkedServiceReference"
+										}
+									}
+								},
 								"translator": {
 									"type": "TabularTranslator",
 									"typeConversion": true,
@@ -151,6 +165,44 @@
 									"type": "DatasetReference"
 								}
 							]
+						},
+						{
+							"name": "Delete File",
+							"type": "Delete",
+							"dependsOn": [
+								{
+									"activity": "Copy Source File",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "ds_population_raw_gz",
+									"type": "DatasetReference"
+								},
+								"logStorageSettings": {
+									"linkedServiceName": {
+										"referenceName": "ls_ablob_sathishcovidreportsa",
+										"type": "LinkedServiceReference"
+									}
+								},
+								"enableLogging": true,
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							}
 						}
 					]
 				}
