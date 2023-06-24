@@ -62,6 +62,16 @@
 				]
 			}
 		],
+		"variables": {
+			"src_relative_url": {
+				"type": "String",
+				"defaultValue": "/sathishjayapal/stunning-guide/main/ecdc_data/case_deaths_uk_ind_only.csv"
+			},
+			"sinkFileName": {
+				"type": "String",
+				"defaultValue": "case_deaths_uk_ind_only.csv"
+			}
+		},
 		"annotations": []
 	}
 }
