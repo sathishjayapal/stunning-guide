@@ -3,77 +3,6 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy case_deaths_uk_ind_only Data",
-				"type": "Copy",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "HttpReadSettings",
-							"maxConcurrentConnections": 1,
-							"requestMethod": "GET",
-							"requestTimeout": ""
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
-					},
-					"sink": {
-						"type": "DelimitedTextSink",
-						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".txt"
-						}
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "ds_http_ecdc_data",
-						"type": "DatasetReference",
-						"parameters": {
-							"relative_url": {
-								"value": "@pipeline().parameters.relative_url_name",
-								"type": "Expression"
-							}
-						}
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "ds_case_ecdc_data_csv",
-						"type": "DatasetReference",
-						"parameters": {
-							"file_name": {
-								"value": "@pipeline().parameters.file_name",
-								"type": "Expression"
-							}
-						}
-					}
-				]
-			},
-			{
 				"name": "Config Lookup",
 				"type": "Lookup",
 				"dependsOn": [],
@@ -175,7 +104,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"relative_url": {
-											"value": "@pipeline().parameters.relative_url_name",
+											"value": "@item().sourceRelativeURL",
 											"type": "Expression"
 										}
 									}
@@ -187,7 +116,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"file_name": {
-											"value": "@pipeline().parameters.file_name",
+											"value": "@item().sinkFileName",
 											"type": "Expression"
 										}
 									}
