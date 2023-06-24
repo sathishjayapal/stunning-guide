@@ -14,6 +14,9 @@
 		"ls_adls_sathishcovidreportingdl_properties_typeProperties_url": {
 			"value": "https://sathishcovidreportingdl.dfs.core.windows.net/"
 		},
+		"ls_http_responsedata_ecdc_europa_eu_properties_typeProperties_url": {
+			"value": "https://raw.githubusercontent.com"
+		},
 		"Population File Uploaded_properties_typeProperties_scope": {
 			"value": "/subscriptions/80ea84e8-afce-4851-928a-9e2219724c69/resourceGroups/1-9fd188c2-playground-sandbox/providers/Microsoft.Storage/storageAccounts/sathishcovidreportsa"
 		},
