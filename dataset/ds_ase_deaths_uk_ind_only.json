@@ -1,0 +1,23 @@
+{
+	"name": "ds_ase_deaths_uk_ind_only",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_http_responsedata_ecdc_europa_eu",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": "/sathishjayapal/stunning-guide/main/ecdc_data/case_deaths_uk_ind_only.csv"
+			},
+			"columnDelimiter": ",",
+			"rowDelimiter": "\n",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
