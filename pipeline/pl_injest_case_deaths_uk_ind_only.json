@@ -50,7 +50,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ds_http_case_deaths_uk_ind_only",
+						"referenceName": "ds_http_ecdc_data",
 						"type": "DatasetReference",
 						"parameters": {
 							"relative_url": {
@@ -62,7 +62,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_case_deaths_uk_ind_only_csv",
+						"referenceName": "ds_case_ecdc_data_csv",
 						"type": "DatasetReference",
 						"parameters": {
 							"file_name": {

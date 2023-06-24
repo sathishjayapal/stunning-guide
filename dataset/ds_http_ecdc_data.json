@@ -1,5 +1,5 @@
 {
-	"name": "ds_http_case_deaths_uk_ind_only",
+	"name": "ds_http_ecdc_data",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_http_responsedata_ecdc_europa_eu",
