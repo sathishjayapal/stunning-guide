@@ -124,8 +124,8 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "SetVariableInfo",
-							"type": "SetVariable",
+							"name": "Copy case_deaths_uk_ind_only Data_copy1",
+							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",
@@ -136,12 +136,63 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "sourceRelativeUrl",
-								"value": {
-									"value": "@item().sourceRelativeUrl",
-									"type": "Expression"
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "HttpReadSettings",
+										"maxConcurrentConnections": 1,
+										"requestMethod": "GET",
+										"requestTimeout": ""
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
 								}
-							}
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_http_ecdc_data",
+									"type": "DatasetReference",
+									"parameters": {
+										"relative_url": {
+											"value": "@pipeline().parameters.relative_url_name",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_case_ecdc_data_csv",
+									"type": "DatasetReference",
+									"parameters": {
+										"file_name": {
+											"value": "@pipeline().parameters.file_name",
+											"type": "Expression"
+										}
+									}
+								}
+							]
 						}
 					]
 				}
