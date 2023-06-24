@@ -5,12 +5,20 @@
 			"referenceName": "ls_http_responsedata_ecdc_europa_eu",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"relative_url": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "HttpServerLocation",
-				"relativeUrl": "/sathishjayapal/stunning-guide/main/ecdc_data/case_deaths_uk_ind_only.csv"
+				"relativeUrl": {
+					"value": "@dataset().relative_url",
+					"type": "Expression"
+				}
 			},
 			"columnDelimiter": ",",
 			"rowDelimiter": "\n",
