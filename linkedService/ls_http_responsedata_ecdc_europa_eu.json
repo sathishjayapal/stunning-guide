@@ -1,10 +1,15 @@
 {
 	"name": "ls_http_responsedata_ecdc_europa_eu",
 	"properties": {
+		"parameters": {
+			"base_url": {
+				"type": "String"
+			}
+		},
 		"annotations": [],
 		"type": "HttpServer",
 		"typeProperties": {
-			"url": "https://raw.githubusercontent.com",
+			"url": "@{linkedService().base_url}",
 			"enableServerCertificateValidation": true,
 			"authenticationType": "Anonymous"
 		}
