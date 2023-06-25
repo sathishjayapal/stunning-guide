@@ -1,0 +1,17 @@
+{
+	"name": "cdc_file_upload_trigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 15,
+				"startTime": "2023-06-25T19:30:00",
+				"timeZone": "Central Standard Time"
+			}
+		}
+	}
+}
