@@ -1,0 +1,56 @@
+{
+	"name": "df_ecdc_data",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_deaths_uk_ind",
+						"type": "DatasetReference"
+					},
+					"name": "CasesAndDeathSource"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "filterukonly"
+				},
+				{
+					"name": "FilterEuropeOnly"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          country as string,",
+				"          country_code as string,",
+				"          continent as string,",
+				"          population as integer,",
+				"          indicator as string,",
+				"          daily_count as integer,",
+				"          date as date,",
+				"          rate_14_day as double,",
+				"          source as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> CasesAndDeathSource",
+				"CasesAndDeathSource filter(continent == 'Europe' && not(isNull(country_code))) ~> filterukonly",
+				"filterukonly select(mapColumn(",
+				"          country,",
+				"          country_code,",
+				"          population,",
+				"          indicator,",
+				"          daily_count,",
+				"          date,",
+				"          source,",
+				"          each(match(name == 'date'),",
+				"               \"reported\" + \"_date\" = $$)",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> FilterEuropeOnly"
+			]
+		}
+	}
+}
