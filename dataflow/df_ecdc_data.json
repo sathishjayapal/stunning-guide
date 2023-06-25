@@ -54,7 +54,7 @@
 				"          country_code_2_digit as string,",
 				"          country_code_3_digit as string,",
 				"          continent as string,",
-				"          population as string",
+				"          population as integer",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
@@ -81,7 +81,7 @@
 				"     count = sum(daily_count),",
 				"     columnNaming: '$V_$N',",
 				"     lateral: true) ~> PivotCounts",
-				"PivotCounts lookup(ERROR_FUNCTION('') == ERROR_FUNCTION(''),",
+				"PivotCounts, CountryLookup lookup(PivotCounts@country == CountryLookup@country,",
 				"     multiple: false,",
 				"     pickup: 'any',",
 				"     broadcast: 'auto')~> lookupcountry"
