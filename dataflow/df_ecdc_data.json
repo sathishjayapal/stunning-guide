@@ -21,7 +21,7 @@
 					"name": "FilterEuropeOnly"
 				},
 				{
-					"name": "pivot1"
+					"name": "PivotCounts"
 				}
 			],
 			"scriptLines": [
@@ -52,8 +52,9 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> FilterEuropeOnly",
-				"FilterEuropeOnly pivot(columnNaming: '$N$V',",
-				"     lateral: true) ~> pivot1"
+				"FilterEuropeOnly pivot(groupBy(country),",
+				"     columnNaming: '$N$V',",
+				"     lateral: true) ~> PivotCounts"
 			]
 		}
 	}
