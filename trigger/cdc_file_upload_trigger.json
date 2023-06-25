@@ -16,7 +16,7 @@
 			"recurrence": {
 				"frequency": "Minute",
 				"interval": 15,
-				"startTime": "2023-06-25T19:30:00",
+				"startTime": "2023-06-25T19:35:00",
 				"timeZone": "Central Standard Time"
 			}
 		}
