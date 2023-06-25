@@ -53,7 +53,7 @@
 					"isSequential": false,
 					"activities": [
 						{
-							"name": "Copy case_deaths_uk_ind_only Data_copy1",
+							"name": "Copy case_deaths_uk_ind_only",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
