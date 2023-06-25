@@ -19,6 +19,9 @@
 				},
 				{
 					"name": "FilterEuropeOnly"
+				},
+				{
+					"name": "pivot1"
 				}
 			],
 			"scriptLines": [
@@ -44,11 +47,13 @@
 				"          indicator,",
 				"          daily_count,",
 				"          source,",
-				"          each(match(name == 'date'),",
-				"               \"reported\" + \"_date\" = $$)",
+				"          each(match(name=='date'),",
+				"               \"reported\"+\"_date\" = $$)",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> FilterEuropeOnly"
+				"     skipDuplicateMapOutputs: true) ~> FilterEuropeOnly",
+				"FilterEuropeOnly pivot(columnNaming: '$N$V',",
+				"     lateral: true) ~> pivot1"
 			]
 		}
 	}
