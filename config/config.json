@@ -18,5 +18,10 @@
         "sourceBaseURL":"https://raw.githubusercontent.com",
         "sourceRelativeURL":"sathishjayapal/stunning-guide/main/ecdc_data/country_response.csv",
         "sinkFileName":"country_response.csv"
+    },
+    {
+        "sourceBaseURL":"https://raw.githubusercontent.com",
+        "sourceRelativeURL":"sathishjayapal/stunning-guide/main/lookup_data/country_lookup.csv",
+        "sinkFileName":"country_lookup.csv"
     }
 ]
