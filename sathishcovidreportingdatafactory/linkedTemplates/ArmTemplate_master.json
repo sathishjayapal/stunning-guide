@@ -21,7 +21,7 @@
 		},
 		"ls_http_responsedata_ecdc_europa_eu_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://raw.githubusercontent.com"
+			"defaultValue": "@{linkedService().base_url}"
 		},
 		"Population File Uploaded_properties_typeProperties_scope": {
 			"type": "string",

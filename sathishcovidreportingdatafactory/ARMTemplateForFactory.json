@@ -21,7 +21,7 @@
 		},
 		"ls_http_responsedata_ecdc_europa_eu_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://raw.githubusercontent.com"
+			"defaultValue": "@{linkedService().base_url}"
 		},
 		"Population File Uploaded_properties_typeProperties_scope": {
 			"type": "string",
@@ -264,14 +264,14 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pl_injest_case_deaths_uk_ind_only')]",
+			"name": "[concat(parameters('factoryName'), '/pl_injest_ecdc_data')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy case_deaths_uk_ind_only Data",
-						"type": "Copy",
+						"name": "Config Lookup",
+						"type": "Lookup",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
@@ -283,52 +283,120 @@
 						"userProperties": [],
 						"typeProperties": {
 							"source": {
-								"type": "DelimitedTextSource",
+								"type": "JsonSource",
 								"storeSettings": {
-									"type": "HttpReadSettings",
-									"maxConcurrentConnections": 1,
-									"requestMethod": "GET",
-									"requestTimeout": ""
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
 								},
 								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
+									"type": "JsonReadSettings"
 								}
 							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "ds_http_case_deaths_uk_ind_only",
+							"dataset": {
+								"referenceName": "config_data_json",
 								"type": "DatasetReference",
 								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "For Config Json Iteration",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Config Lookup",
+								"dependencyConditions": [
+									"Succeeded"
+								]
 							}
 						],
-						"outputs": [
-							{
-								"referenceName": "ds_case_deaths_uk_ind_only_csv",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Config Lookup').output.value",
+								"type": "Expression"
+							},
+							"isSequential": false,
+							"activities": [
+								{
+									"name": "Copy case_deaths_uk_ind_only",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "DelimitedTextSource",
+											"storeSettings": {
+												"type": "HttpReadSettings",
+												"maxConcurrentConnections": 1,
+												"requestMethod": "GET",
+												"requestTimeout": ""
+											},
+											"formatSettings": {
+												"type": "DelimitedTextReadSettings"
+											}
+										},
+										"sink": {
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".txt"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_http_ecdc_data",
+											"type": "DatasetReference",
+											"parameters": {
+												"relative_url": {
+													"value": "@item().sourceRelativeURL",
+													"type": "Expression"
+												},
+												"base_url": {
+													"value": "@item().sourceBaseURL",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_case_ecdc_data_csv",
+											"type": "DatasetReference",
+											"parameters": {
+												"file_name": {
+													"value": "@item().sinkFileName",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
 					}
 				],
 				"policy": {
@@ -338,12 +406,37 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_http_case_deaths_uk_ind_only')]",
-				"[concat(variables('factoryId'), '/datasets/ds_case_deaths_uk_ind_only_csv')]"
+				"[concat(variables('factoryId'), '/datasets/config_data_json')]",
+				"[concat(variables('factoryId'), '/datasets/ds_http_ecdc_data')]",
+				"[concat(variables('factoryId'), '/datasets/ds_case_ecdc_data_csv')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_case_deaths_uk_ind_only_csv')]",
+			"name": "[concat(parameters('factoryName'), '/config_data_json')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_ablob_sathishcovidreportsa",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "config.json",
+						"container": "config"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_ablob_sathishcovidreportsa')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_case_ecdc_data_csv')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -351,12 +444,20 @@
 					"referenceName": "ls_adls_sathishcovidreportingdl",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"file_name": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "case_deaths_uk_ind_only.csv",
+						"fileName": {
+							"value": "@dataset().file_name",
+							"type": "Expression"
+						},
 						"folderPath": "ecdc",
 						"fileSystem": "raw"
 					},
@@ -372,20 +473,37 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_http_case_deaths_uk_ind_only')]",
+			"name": "[concat(parameters('factoryName'), '/ds_http_ecdc_data')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "ls_http_responsedata_ecdc_europa_eu",
-					"type": "LinkedServiceReference"
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"base_url": {
+							"value": "@dataset().base_url",
+							"type": "Expression"
+						}
+					}
+				},
+				"parameters": {
+					"relative_url": {
+						"type": "string"
+					},
+					"base_url": {
+						"type": "string"
+					}
 				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "HttpServerLocation",
-						"relativeUrl": "/sathishjayapal/stunning-guide/main/ecdc_data/case_deaths_uk_ind_only.csv"
+						"relativeUrl": {
+							"value": "@dataset().relative_url",
+							"type": "Expression"
+						}
 					},
 					"columnDelimiter": ",",
 					"rowDelimiter": "\n",
@@ -494,6 +612,11 @@
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
+				"parameters": {
+					"base_url": {
+						"type": "String"
+					}
+				},
 				"annotations": [],
 				"type": "HttpServer",
 				"typeProperties": {
@@ -532,6 +655,36 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/pl_ingest_population_data')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/cdc_file_upload_trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_injest_ecdc_data",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 15,
+						"startTime": "2023-06-25T19:30:00",
+						"timeZone": "Central Standard Time"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_injest_ecdc_data')]"
 			]
 		}
 	]
