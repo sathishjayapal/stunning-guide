@@ -10,6 +10,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "CasesAndDeathSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_country_lookup",
+						"type": "DatasetReference"
+					},
+					"name": "CountryLookup"
 				}
 			],
 			"sinks": [],
@@ -39,6 +46,16 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> CasesAndDeathSource",
+				"source(output(",
+				"          Country as string,",
+				"          Response_measure as string,",
+				"          change as string,",
+				"          date_start as string,",
+				"          date_end as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> CountryLookup",
 				"CasesAndDeathSource filter(continent == 'Europe' && not(isNull(country_code))) ~> filterukonly",
 				"filterukonly select(mapColumn(",
 				"          country,",
