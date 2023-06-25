@@ -2,17 +2,17 @@
 	"name": "ds_country_lookup",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_ablob_sathishcovidreportsa",
+			"referenceName": "ls_adls_sathishcovidreportingdl",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation",
-				"fileName": "country_response.csv",
+				"type": "AzureBlobFSLocation",
+				"fileName": "country_lookup.csv",
 				"folderPath": "ecdc",
-				"container": "raw"
+				"fileSystem": "raw"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
