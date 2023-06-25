@@ -57,6 +57,7 @@
 				"          population,",
 				"          reported_date,",
 				"          source),",
+				"     pivotBy(indicator),",
 				"     columnNaming: '$N$V',",
 				"     lateral: true) ~> PivotCounts"
 			]
