@@ -1,0 +1,19 @@
+{
+  "name": "config_data_json",
+  "properties": {
+    "linkedServiceName": {
+      "referenceName": "ls_ablob_sathishcovidreportsa",
+      "type": "LinkedServiceReference"
+    },
+    "annotations": [],
+    "type": "Json",
+    "typeProperties": {
+      "location": {
+        "type": "AzureBlobStorageLocation",
+        "fileName": "config.json",
+        "container": "config"
+      }
+    },
+    "schema": {}
+  }
+}

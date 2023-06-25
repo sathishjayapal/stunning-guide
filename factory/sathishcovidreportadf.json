@@ -1,9 +1,0 @@
-{
-	"name": "sathishcovidreportadf",
-	"location": "eastus",
-	"identity": {
-		"type": "SystemAssigned",
-		"principalId": "94e7ddbf-6257-4575-a231-35bb8707ab58",
-		"tenantId": "84f1e4ea-8554-43e1-8709-f0b8589ea118"
-	}
-}

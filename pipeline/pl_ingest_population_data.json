@@ -1,0 +1,213 @@
+{
+  "name": "pl_ingest_population_data",
+  "properties": {
+    "activities": [
+      {
+        "name": "Check File exists",
+        "type": "Validation",
+        "dependsOn": [],
+        "userProperties": [],
+        "typeProperties": {
+          "dataset": {
+            "referenceName": "ds_population_raw_gz",
+            "type": "DatasetReference"
+          },
+          "timeout": "0.00:01:00",
+          "sleep": 10,
+          "minimumSize": 1024
+        }
+      },
+      {
+        "name": "File Meta Data",
+        "type": "GetMetadata",
+        "dependsOn": [
+          {
+            "activity": "Check File exists",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "userProperties": [],
+        "typeProperties": {
+          "dataset": {
+            "referenceName": "ds_population_raw_gz",
+            "type": "DatasetReference"
+          },
+          "fieldList": [
+            "size",
+            "columnCount",
+            "exists"
+          ],
+          "storeSettings": {
+            "type": "AzureBlobStorageReadSettings",
+            "modifiedDatetimeStart": "2023-06-24T00:00:00.000Z",
+            "enablePartitionDiscovery": false
+          },
+          "formatSettings": {
+            "type": "DelimitedTextReadSettings"
+          }
+        }
+      },
+      {
+        "name": "File If Condition",
+        "type": "IfCondition",
+        "dependsOn": [
+          {
+            "activity": "File Meta Data",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "userProperties": [],
+        "typeProperties": {
+          "expression": {
+            "value": "@equals(activity('File Meta Data').output.columnCount,13)",
+            "type": "Expression"
+          },
+          "ifFalseActivities": [
+            {
+              "name": "Send Email",
+              "type": "WebActivity",
+              "dependsOn": [],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "userProperties": [],
+              "typeProperties": {
+                "url": "https://sathishjayapal.me",
+                "method": "POST",
+                "body": "Dummy"
+              }
+            }
+          ],
+          "ifTrueActivities": [
+            {
+              "name": "Copy Source File",
+              "type": "Copy",
+              "dependsOn": [],
+              "policy": {
+                "timeout": "0.00:05:00",
+                "retry": 3,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": true
+              },
+              "userProperties": [],
+              "typeProperties": {
+                "source": {
+                  "type": "DelimitedTextSource",
+                  "storeSettings": {
+                    "type": "AzureBlobStorageReadSettings",
+                    "maxConcurrentConnections": 1,
+                    "recursive": true,
+                    "enablePartitionDiscovery": false
+                  },
+                  "formatSettings": {
+                    "type": "DelimitedTextReadSettings"
+                  }
+                },
+                "sink": {
+                  "type": "DelimitedTextSink",
+                  "storeSettings": {
+                    "type": "AzureBlobFSWriteSettings"
+                  },
+                  "formatSettings": {
+                    "type": "DelimitedTextWriteSettings",
+                    "quoteAllText": true,
+                    "fileExtension": ".txt"
+                  }
+                },
+                "enableStaging": false,
+                "logSettings": {
+                  "enableCopyActivityLog": true,
+                  "copyActivityLogSettings": {
+                    "logLevel": "Info",
+                    "enableReliableLogging": false
+                  },
+                  "logLocationSettings": {
+                    "linkedServiceName": {
+                      "referenceName": "ls_ablob_sathishcovidreportsa",
+                      "type": "LinkedServiceReference"
+                    }
+                  }
+                },
+                "translator": {
+                  "type": "TabularTranslator",
+                  "typeConversion": true,
+                  "typeConversionSettings": {
+                    "allowDataTruncation": true,
+                    "treatBooleanAsNumber": false
+                  }
+                }
+              },
+              "inputs": [
+                {
+                  "referenceName": "ds_population_raw_gz",
+                  "type": "DatasetReference"
+                }
+              ],
+              "outputs": [
+                {
+                  "referenceName": "ds_population_raw_tsv",
+                  "type": "DatasetReference"
+                }
+              ]
+            },
+            {
+              "name": "Delete File",
+              "type": "Delete",
+              "dependsOn": [
+                {
+                  "activity": "Copy Source File",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "userProperties": [],
+              "typeProperties": {
+                "dataset": {
+                  "referenceName": "ds_population_raw_gz",
+                  "type": "DatasetReference"
+                },
+                "logStorageSettings": {
+                  "linkedServiceName": {
+                    "referenceName": "ls_ablob_sathishcovidreportsa",
+                    "type": "LinkedServiceReference"
+                  }
+                },
+                "enableLogging": true,
+                "storeSettings": {
+                  "type": "AzureBlobStorageReadSettings",
+                  "recursive": true,
+                  "enablePartitionDiscovery": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "annotations": []
+  }
+}
