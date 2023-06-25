@@ -43,7 +43,6 @@
 				"          population,",
 				"          indicator,",
 				"          daily_count,",
-				"          date,",
 				"          source,",
 				"          each(match(name == 'date'),",
 				"               \"reported\" + \"_date\" = $$)",
