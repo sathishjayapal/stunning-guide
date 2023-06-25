@@ -138,7 +138,7 @@
 			"file_name": {
 				"type": "string"
 			},
-			"sourceRelativeUrl": {
+			"sourceBaseURL": {
 				"type": "string"
 			}
 		},
