@@ -21,23 +21,23 @@
 		},
 		"schema": [
 			{
-				"name": "Country",
+				"name": "country",
 				"type": "String"
 			},
 			{
-				"name": "Response_measure",
+				"name": "country_code_2_digit",
 				"type": "String"
 			},
 			{
-				"name": "change",
+				"name": "country_code_3_digit",
 				"type": "String"
 			},
 			{
-				"name": "date_start",
+				"name": "continent",
 				"type": "String"
 			},
 			{
-				"name": "date_end",
+				"name": "population",
 				"type": "String"
 			}
 		]
