@@ -96,11 +96,7 @@
 				"          {confirmed cases_count},",
 				"          deaths_count,",
 				"          reported_date,",
-				"          source,",
-				"          country = CountryLookup@country,",
-				"          country_code,",
-				"          continent,",
-				"          population = CountryLookup@population",
+				"          source",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1"
