@@ -55,7 +55,8 @@
 				"FilterEuropeOnly pivot(groupBy(country,",
 				"          country_code,",
 				"          population,",
-				"          {} = ERROR_FUNCTION('')),",
+				"          reported_date,",
+				"          source),",
 				"     columnNaming: '$N$V',",
 				"     lateral: true) ~> PivotCounts"
 			]
