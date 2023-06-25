@@ -52,7 +52,10 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> FilterEuropeOnly",
-				"FilterEuropeOnly pivot(groupBy(country),",
+				"FilterEuropeOnly pivot(groupBy(country,",
+				"          country_code,",
+				"          population,",
+				"          {} = ERROR_FUNCTION('')),",
 				"     columnNaming: '$N$V',",
 				"     lateral: true) ~> PivotCounts"
 			]
