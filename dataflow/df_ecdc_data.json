@@ -57,7 +57,7 @@
 				"          population,",
 				"          reported_date,",
 				"          source),",
-				"     pivotBy(indicator),",
+				"     pivotBy(indicator, ['confirmed casses', 'deaths']),",
 				"     columnNaming: '$N$V',",
 				"     lateral: true) ~> PivotCounts"
 			]
