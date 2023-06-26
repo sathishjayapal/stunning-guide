@@ -23,10 +23,6 @@
 			"type": "string",
 			"defaultValue": "@{linkedService().base_url}"
 		},
-		"Population File Uploaded_properties_typeProperties_scope": {
-			"type": "string",
-			"defaultValue": "/subscriptions/80ea84e8-afce-4851-928a-9e2219724c69/resourceGroups/1-9fd188c2-playground-sandbox/providers/Microsoft.Storage/storageAccounts/sathishcovidreportsa"
-		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -65,9 +61,6 @@
 					},
 					"ls_http_responsedata_ecdc_europa_eu_properties_typeProperties_url": {
 						"value": "[parameters('ls_http_responsedata_ecdc_europa_eu_properties_typeProperties_url')]"
-					},
-					"Population File Uploaded_properties_typeProperties_scope": {
-						"value": "[parameters('Population File Uploaded_properties_typeProperties_scope')]"
 					}
 				}
 			},
