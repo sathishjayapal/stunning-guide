@@ -1,40 +1,41 @@
 {
-  "name": "ds_http_ecdc_data",
-  "properties": {
-    "linkedServiceName": {
-      "referenceName": "ls_http_responsedata_ecdc_europa_eu",
-      "type": "LinkedServiceReference",
-      "parameters": {
-        "base_url": {
-          "value": "@dataset().base_url",
-          "type": "Expression"
-        }
-      }
-    },
-    "parameters": {
-      "relative_url": {
-        "type": "string"
-      },
-      "base_url": {
-        "type": "string"
-      }
-    },
-    "annotations": [],
-    "type": "DelimitedText",
-    "typeProperties": {
-      "location": {
-        "type": "HttpServerLocation",
-        "relativeUrl": {
-          "value": "@dataset().relative_url",
-          "type": "Expression"
-        }
-      },
-      "columnDelimiter": ",",
-      "rowDelimiter": "\n",
-      "escapeChar": "\\",
-      "firstRowAsHeader": true,
-      "quoteChar": "\""
-    },
-    "schema": []
-  }
+	"name": "ds_http_ecdc_data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_http_responsedata_ecdc_europa_eu",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"base_url": {
+					"value": "@dataset().base_url",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"relative_url": {
+				"type": "string"
+			},
+			"base_url": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": {
+					"value": "@dataset().relative_url",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"rowDelimiter": "\n",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }
